@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+    <div class="text-center">
+        <h1 class="display-4">Bem Vindo ao Agendador de Consultas</h1>
+        <hr />
+        <div>
+            <ul id="listaMenu">
+                <li>
+                    <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create","Agenda")'" value="Registrar nova Consulta" />
+                </li>
+                <li>
+                    <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create","Pessoas")'" value="Registrar novo Paciente ou Clínica" />
+                </li>
+                <li>
+                    <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","Agenda")'" value="Listar Consultas" />
+                </li>
+                <li>
+                    <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("GetConsultaPorParam","Agenda")'" value="Pesquisa Consultas por Filtros" />
+                </li>
+            </ul>
+        </div>
+    </div>

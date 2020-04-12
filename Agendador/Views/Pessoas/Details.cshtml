@@ -1,0 +1,72 @@
+﻿@model Agendador.Models.Pessoa
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalhes de @Html.DisplayFor(model => model.DescNomeA)</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescNomeA)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DescNomeA)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescTelefoneA)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DescTelefoneA)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescCpfcnpjA)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DescCpfcnpjA)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescEnderecoA)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DescEnderecoA)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescEmailA)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DescEmailA)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescTipoPessoa)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DescTipoPessoa)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IndrConvenioA)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.IndrConvenioA == "S" ? "Sim" : "Não")
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescConvenioA)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DescConvenioA)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescNumconvenioA)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DescNumconvenioA)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.PessoaId">Editar</a> |
+    <a asp-action="Index">Voltar para Lista de Pessoas</a>
+</div>

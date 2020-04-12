@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Agendador.Models.Pessoa>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Lista de Pessoas</h1>
+
+<p>
+    <a asp-action="Create">Criar Nova Pessoa</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DescNomeA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescTelefoneA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescCpfcnpjA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescEnderecoA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescEmailA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IndrTipoA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IndrConvenioA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescConvenioA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescNumconvenioA)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescNomeA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescTelefoneA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescCpfcnpjA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescEnderecoA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescEmailA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescTipoPessoa)
+            </td>
+            <td>
+                @(item.IndrConvenioA == "S"? "Sim" : "Não")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescConvenioA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescNumconvenioA)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PessoaId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.PessoaId">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.PessoaId">Excluir</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,52 @@
+﻿@model Agendador.Models.Agenda
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Excluir</h1>
+
+<h3>Você tem certeza que deseja excluir este agendamento?</h3>
+<div>
+    <h4>Agenda</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataInicioD)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataInicioD)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataFimD)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataFimD)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IndrStatusN)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IndrStatusN)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Clinica)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Clinica.DescCpfcnpjA)
+        </dd class>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Paciente)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Paciente.DescCpfcnpjA)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AgendaId" />
+        <input type="submit" value="Excluir" class="btn btn-danger" /> |
+        <a asp-action="Index">Voltar para Lista de Consultas</a>
+    </form>
+</div>

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Agendador.Models.Agenda>
+
+@{
+    ViewData["Title"] = "Lista Consultas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Lista de Consultas</h1>
+@if (ViewData["ValidaAgenda"] != null)
+{
+    @if (ViewData["ValidaAgenda"].ToString() == "Sucesso")
+    {
+        <div class="alert alert-success alert-dismissible show" role="alert">
+            <strong>Sucesso!!</strong> Consulta foi agendada com sucesso.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger alert-dismissible show" role="alert">
+            <strong>Falha!</strong> @ViewData["ValidaAgenda"].ToString()
+            <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+}
+<p>
+    <a asp-action="Create">Agendar Nova Consulta</a>
+</p>
+<p>
+    <a asp-action="GetConsultaPorParam">Filtrar Lista por Parâmetros</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DataInicioD)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataFimD)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IndrStatusN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Clinica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Paciente)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataInicioD)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataFimD)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IndrStatusN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clinica.DescNomeA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Paciente.DescNomeA)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.AgendaId">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.AgendaId">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.AgendaId">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Agendador.Models.Agenda>
+
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <div>
+        <h2>Filtrar Consultas Agendadas</h2>
+        <div class="row" style="margin-left: 0;">
+            <form asp-action="GetConsultaPorParam" method="GET">
+                <div class="form-row">
+                    <div style="width: 100%">
+                        <h4>Intervalo de datas</h4>
+                    </div>
+                    <div class="col-lg-8 row">
+                        <div class="col-md-5">
+                            <label class="control-label">Data Inicial</label>
+                            <input type="datetime-local" name="DataInicioD" class="form-control" />
+                        </div>
+                        <div class="col-md-2" style="align-self: flex-end; margin-bottom: 7px; text-align: -webkit-center;">
+                            <span style="margin: 35px 20px;">ATÉ</span>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="control-label">Data Final</label>
+                            <input type="datetime-local" name="DataFimD" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-lg-1" style="align-self: flex-end; margin-bottom: 7px; text-align: -webkit-center;">
+                        <span><b>OU/E</b></span>
+                    </div>
+                    <div class="col-lg-3">
+                        @Html.Label("IndrStatusN", "Situação da Consulta*")
+                        <select class="form-control" name="IndrStatusN" asp-items="Html.GetEnumSelectList<EnumStatus>()">
+                            <option selected="selected" value="">Selecione a Situação</option>
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <label class="control-label">Clínica</label>
+                        <select name="ClinicaId" class="form-control" asp-items="ViewBag.ClinicaId">
+                            <option selected="selected" value="">Selecione a Clínica</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2" style="align-self: flex-end; margin-bottom: 7px; text-align: -webkit-center;">
+                        <span><b>E</b></span>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="control-label">Data da Consulta</label>
+                        <input type="date" name="DataConsulta" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <input type="submit" value="Filtrar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        if(ViewBag.QtdeConsultasDisp != null)
+        {
+            <label>Consultas disponíveis para esta data: @ViewBag.QtdeConsultasDisp</label> 
+        }
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DataInicioD)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DataFimD)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IndrStatusN)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Clinica)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Paciente)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DataInicioD)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DataFimD)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IndrStatusN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Clinica.DescNomeA)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Paciente.DescNomeA)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.AgendaId">Editar</a> |
+                                <a asp-action="Details" asp-route-id="@item.AgendaId">Detalhes</a> |
+                                <a asp-action="Delete" asp-route-id="@item.AgendaId">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p style="color: cornflowerblue; font-size:medium;">Does not contain records with the selected filter</p>
+    }
+</div>

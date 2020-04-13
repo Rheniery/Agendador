@@ -1,0 +1,14 @@
+﻿.separadorInputs {
+    align-self: flex-end;
+    margin-bottom: 7px;
+    text-align: -webkit-center;
+}
+
+.rowMargin {
+    margin-bottom: 20px;
+    margin-left: 0px;
+}
+
+.lbQuantidade{
+    color: red;
+}

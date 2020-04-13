@@ -3,121 +3,173 @@
 
 // Write your JavaScript code.
 
-function validaCpfCnpj(val) {
-    if (val.length == 14) {
-        var cpf = val.trim
+/*
+ verifica_cpf_cnpj
+ 
+ Verifica se é CPF ou CNPJ
+ 
+ @see http://www.todoespacoonline.com/w/
+*/
+function verifica_cpf_cnpj(valor) {
 
-        cpf = cpf.replace(/\./g, '');
-        cpf = cpf.replace('-', '');
-        cpf = cpf.split('');
+    // Garante que o valor é uma string
+    valor = valor.toString();
 
-        var v1 = 0;
-        var v2 = 0;
-        var aux = false;
+    // Remove caracteres inválidos do valor
+    valor = valor.replace(/[^0-9]/g, '');
 
-        for (var i = 1; cpf.length > i; i++) {
-            if (cpf[i - 1] != cpf[i]) {
-                aux = true;
-            }
-        }
+    // Verifica CPF
+    if (valor.length === 11) {
+        return 'CPF';
+    }
 
-        if (aux == false) {
-            return false;
-        }
+    // Verifica CNPJ
+    else if (valor.length === 14) {
+        return 'CNPJ';
+    }
 
-        for (var i = 0, p = 10; (cpf.length - 2) > i; i++ , p--) {
-            v1 += cpf[i] * p;
-        }
-
-        v1 = ((v1 * 10) % 11);
-
-        if (v1 == 10) {
-            v1 = 0;
-        }
-
-        if (v1 != cpf[9]) {
-            return false;
-        }
-
-        for (var i = 0, p = 11; (cpf.length - 1) > i; i++ , p--) {
-            v2 += cpf[i] * p;
-        }
-
-        v2 = ((v2 * 10) % 11);
-
-        if (v2 == 10) {
-            v2 = 0;
-        }
-
-        if (v2 != cpf[10]) {
-            return false;
-        } else {
-            return true;
-        }
-    } else if (val.length == 18) {
-        var cnpj = val.trim();
-
-        cnpj = cnpj.replace(/\./g, '');
-        cnpj = cnpj.replace('-', '');
-        cnpj = cnpj.replace('/', '');
-        cnpj = cnpj.split('');
-
-        var v1 = 0;
-        var v2 = 0;
-        var aux = false;
-
-        for (var i = 1; cnpj.length > i; i++) {
-            if (cnpj[i - 1] != cnpj[i]) {
-                aux = true;
-            }
-        }
-
-        if (aux == false) {
-            return false;
-        }
-
-        for (var i = 0, p1 = 5, p2 = 13; (cnpj.length - 2) > i; i++ , p1-- , p2--) {
-            if (p1 >= 2) {
-                v1 += cnpj[i] * p1;
-            } else {
-                v1 += cnpj[i] * p2;
-            }
-        }
-
-        v1 = (v1 % 11);
-
-        if (v1 < 2) {
-            v1 = 0;
-        } else {
-            v1 = (11 - v1);
-        }
-
-        if (v1 != cnpj[12]) {
-            return false;
-        }
-
-        for (var i = 0, p1 = 6, p2 = 14; (cnpj.length - 1) > i; i++ , p1-- , p2--) {
-            if (p1 >= 2) {
-                v2 += cnpj[i] * p1;
-            } else {
-                v2 += cnpj[i] * p2;
-            }
-        }
-
-        v2 = (v2 % 11);
-
-        if (v2 < 2) {
-            v2 = 0;
-        } else {
-            v2 = (11 - v2);
-        }
-
-        if (v2 != cnpj[13]) {
-            return false;
-        } else {
-            return true;
-        }
-    } else {
+    // Não retorna nada
+    else {
         return false;
     }
-}
+
+} // verifica_cpf_cnpj
+
+/*
+ calc_digitos_posicoes
+ 
+ Multiplica dígitos vezes posições
+ 
+ @param string digitos Os digitos desejados
+ @param string posicoes A posição que vai iniciar a regressão
+ @param string soma_digitos A soma das multiplicações entre posições e dígitos
+ @return string Os dígitos enviados concatenados com o último dígito
+*/
+function calc_digitos_posicoes(digitos, posicoes = 10, soma_digitos = 0) {
+
+    // Garante que o valor é uma string
+    digitos = digitos.toString();
+
+    // Faz a soma dos dígitos com a posição
+    // Ex. para 10 posições:
+    //   0    2    5    4    6    2    8    8   4
+    // x10   x9   x8   x7   x6   x5   x4   x3  x2
+    //   0 + 18 + 40 + 28 + 36 + 10 + 32 + 24 + 8 = 196
+    for (var i = 0; i < digitos.length; i++) {
+        // Preenche a soma com o dígito vezes a posição
+        soma_digitos = soma_digitos + (digitos[i] * posicoes);
+
+        // Subtrai 1 da posição
+        posicoes--;
+
+        // Parte específica para CNPJ
+        // Ex.: 5-4-3-2-9-8-7-6-5-4-3-2
+        if (posicoes < 2) {
+            // Retorno a posição para 9
+            posicoes = 9;
+        }
+    }
+
+    // Captura o resto da divisão entre soma_digitos dividido por 11
+    // Ex.: 196 % 11 = 9
+    soma_digitos = soma_digitos % 11;
+
+    // Verifica se soma_digitos é menor que 2
+    if (soma_digitos < 2) {
+        // soma_digitos agora será zero
+        soma_digitos = 0;
+    } else {
+        // Se for maior que 2, o resultado é 11 menos soma_digitos
+        // Ex.: 11 - 9 = 2
+        // Nosso dígito procurado é 2
+        soma_digitos = 11 - soma_digitos;
+    }
+
+    // Concatena mais um dígito aos primeiro nove dígitos
+    // Ex.: 025462884 + 2 = 0254628842
+    var cpf = digitos + soma_digitos;
+
+    // Retorna
+    return cpf;
+
+} // calc_digitos_posicoes
+
+/*
+ Valida CPF
+ 
+ Valida se for CPF
+ 
+ @param  string cpf O CPF com ou sem pontos e traço
+ @return bool True para CPF correto - False para CPF incorreto
+*/
+function valida_cpf(valor) {
+
+    // Garante que o valor é uma string
+    valor = valor.toString();
+
+    // Remove caracteres inválidos do valor
+    valor = valor.replace(/[^0-9]/g, '');
+
+
+    // Captura os 9 primeiros dígitos do CPF
+    // Ex.: 02546288423 = 025462884
+    var digitos = valor.substr(0, 9);
+
+    // Faz o cálculo dos 9 primeiros dígitos do CPF para obter o primeiro dígito
+    var novo_cpf = calc_digitos_posicoes(digitos);
+
+    // Faz o cálculo dos 10 dígitos do CPF para obter o último dígito
+    var novo_cpf = calc_digitos_posicoes(novo_cpf, 11);
+
+    // Verifica se o novo CPF gerado é idêntico ao CPF enviado
+    if (novo_cpf === valor) {
+        // CPF válido
+        return true;
+    } else {
+        // CPF inválido
+        return false;
+    }
+
+} // valida_cpf
+
+/*
+ valida_cnpj
+ 
+ Valida se for um CNPJ
+ 
+ @param string cnpj
+ @return bool true para CNPJ correto
+*/
+function valida_cnpj(valor) {
+
+    // Garante que o valor é uma string
+    valor = valor.toString();
+
+    // Remove caracteres inválidos do valor
+    valor = valor.replace(/[^0-9]/g, '');
+
+
+    // O valor original
+    var cnpj_original = valor;
+
+    // Captura os primeiros 12 números do CNPJ
+    var primeiros_numeros_cnpj = valor.substr(0, 12);
+
+    // Faz o primeiro cálculo
+    var primeiro_calculo = calc_digitos_posicoes(primeiros_numeros_cnpj, 5);
+
+    // O segundo cálculo é a mesma coisa do primeiro, porém, começa na posição 6
+    var segundo_calculo = calc_digitos_posicoes(primeiro_calculo, 6);
+
+    // Concatena o segundo dígito ao CNPJ
+    var cnpj = segundo_calculo;
+
+    // Verifica se o CNPJ gerado é idêntico ao enviado
+    if (cnpj === cnpj_original) {
+        return true;
+    }
+
+    // Retorna falso por padrão
+    return false;
+
+} // valida_cnpj

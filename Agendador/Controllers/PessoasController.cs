@@ -41,14 +41,22 @@ namespace Agendador.Controllers
                 return NotFound();
             }
 
-            var pessoa = await _context.Pessoa
+            try
+            {
+                var pessoa = await _context.Pessoa
                 .FirstOrDefaultAsync(m => m.PessoaId == id);
-            if (pessoa == null)
+                if (pessoa == null)
+                {
+                    return NotFound();
+                }
+
+                return View(pessoa);
+            }
+            catch(Exception ex)
             {
                 return NotFound();
             }
-
-            return View(pessoa);
+            
         }
 
         // GET: Pessoas/Create

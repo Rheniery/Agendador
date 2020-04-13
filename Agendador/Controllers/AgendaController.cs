@@ -45,17 +45,24 @@ namespace Agendador.Controllers
             {
                 return NotFound();
             }
-
-            var agenda = await _context.Agenda
+            try
+            {
+                var agenda = await _context.Agenda
                 .Include(a => a.Clinica)
                 .Include(a => a.Paciente)
                 .FirstOrDefaultAsync(m => m.AgendaId == id);
-            if (agenda == null)
+                if (agenda == null)
+                {
+                    return NotFound();
+                }
+
+                return View(agenda);
+            }
+            catch(Exception ex)
             {
                 return NotFound();
             }
-
-            return View(agenda);
+            
         }
 
         // GET: Agenda/Create
@@ -118,15 +125,22 @@ namespace Agendador.Controllers
             {
                 return NotFound();
             }
-
-            var agenda = await _context.Agenda.FindAsync(id);
-            if (agenda == null)
+            try
+            {
+                var agenda = await _context.Agenda.FindAsync(id);
+                if (agenda == null)
+                {
+                    return NotFound();
+                }
+                ViewData["ClinicaId"] = new SelectList(_context.Pessoa.Where(x => x.IndrTipoA == "J"), "PessoaId", "DescNomeA", agenda.ClinicaId);
+                ViewData["PacienteId"] = new SelectList(_context.Pessoa.Where(x => x.IndrTipoA == "F"), "PessoaId", "DescNomeA", agenda.PacienteId);
+                return View(agenda);
+            }
+            catch(Exception ex)
             {
                 return NotFound();
             }
-            ViewData["ClinicaId"] = new SelectList(_context.Pessoa.Where(x => x.IndrTipoA == "J"), "PessoaId", "DescNomeA", agenda.ClinicaId);
-            ViewData["PacienteId"] = new SelectList(_context.Pessoa.Where(x => x.IndrTipoA == "F"), "PessoaId", "DescNomeA", agenda.PacienteId);
-            return View(agenda);
+            
         }
 
         // POST: Agenda/Edit/5
@@ -213,10 +227,19 @@ namespace Agendador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var agenda = await _context.Agenda.FindAsync(id);
-            _context.Agenda.Remove(agenda);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var agenda = await _context.Agenda.FindAsync(id);
+                _context.Agenda.Remove(agenda);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                ViewData["ErroDelete"] = "Erro";
+                return RedirectToAction("Delete", new { id = id });
+            }
+            
         }
 
         /// <summary>
@@ -233,7 +256,6 @@ namespace Agendador.Controllers
                 ViewData["ClinicaId"] = new SelectList(_context.Pessoa.Where(x => x.IndrTipoA == "J"), "PessoaId", "DescNomeA", agenda.ClinicaId);
 
                 var listaConsultas = new List<Agenda>();
-                var teste = dataConsulta.ToString("d");
                 listaConsultas = _context.Agenda
                                 .Include(a => a.Clinica)
                                 .Include(a => a.Paciente).ToList();
@@ -241,7 +263,7 @@ namespace Agendador.Controllers
                 {
                     listaConsultas = listaConsultas.Where(x => x.ClinicaId == agenda.ClinicaId
                             && string.Compare(x.DataInicioD.ToString("d"), dataConsulta.ToString("d")) == 0).ToList();
-                    ViewBag.QtdeConsultasDisp = 20 - listaConsultas.Count();
+                    ViewBag.QtdeConsultasDisp = 20 - listaConsultas.Where(x => x.IndrStatusN != EnumStatus.CanceladoClinica && x.IndrStatusN != EnumStatus.CanceladoUsuario).Count();
                 }
                 else
                 {
@@ -255,7 +277,7 @@ namespace Agendador.Controllers
                     }
                     if (agenda.IndrStatusN != 0)
                     {
-                        listaConsultas = listaConsultas.Where(x => x.IndrStatusN <= (EnumStatus)agenda.IndrStatusN).ToList();
+                        listaConsultas = listaConsultas.Where(x => x.IndrStatusN == (EnumStatus)agenda.IndrStatusN).ToList();
                     }
                 }
                 

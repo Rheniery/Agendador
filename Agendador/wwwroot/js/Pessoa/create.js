@@ -32,42 +32,37 @@
         }
     })
 
-
     $("form").submit(function (event) {
-        if (!ValidaCampos()) {
-            event.preventDefault()
+        var valida = true;
+        if ($("select[name='IndrTipoA'] option:selected").val() == "F") {
+            var validaMask = valida_cpf($("#DescCpfcnpjA").val());
+            if (!validaMask) {
+                alert("CPF inválido, por favor corrija.");
+                valida = false;
+            }
+            else if (!$("input[name='IndrConvenioA']").is(':checked')) {
+                alert("Selecione se o paciente tem convênio ou não!");
+                valida = false;
+            }
+            else if ($("#rbConvenioSim").is(":checked")) {
+                if ($("#DescConvenioA").val() == "") {
+                    alert("Por favor, insira o nome do convênio.");
+                    valida = false;
+                }
+                else if ($("#DescNumconvenioA").val() == "") {
+                    alert("Por favor, insira o número do convênio.");
+                    valida = false;
+                }
+            }
+        } else if ($("select[name='IndrTipoA'] option:selected").val() == "J") {
+            var validaMask = valida_cnpj($("#DescCpfcnpjA").val());
+            if (!validaMask) {
+                alert("CNPJ inválido, por favor corrija.");
+                valida = false;
+            }
         }
+
+        if (!valida)
+            event.preventDefault()
     });
 });
-
-function ValidaCampos() {
-    if ($("select[name='IndrTipoA'] option:selected").val() == "F") {
-        if (!validaCpfCnpj($("#DescCpfcnpjA").val())) {
-            alert("CPF inválido, por favor corrija.");
-            return false;
-        }
-
-        if (!$("input[name='IndrConvenioA']").is(':checked')) {
-            alert("Selecione se o paciente tem convênio ou não!");
-            return false;
-        }
-
-        if ($("#rbConvenioSim").is(":checked")) {
-            if ($("#DescConvenioA").val() == "") {
-                alert("Por favor, insira o nome do convênio.");
-                return false;
-            }
-            if ($("#DescNumconvenioA").val() == "") {
-                alert("Por favor, insira o número do convênio.");
-                return false;
-            }
-        }
-    } else if ($("select[name='IndrTipoA'] option:selected").val() == "J") {
-        if (!validaCpfCnpj($("#DescCpfcnpjA").val())) {
-            alert("CNPJ inválido, por favor corrija.");
-            return false;
-        }
-    }
-
-    return true;
-}

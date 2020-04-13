@@ -4,53 +4,65 @@
     ViewData["Title"] = "Search";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+    <link href="~/css/Agenda/listConsultas.css" rel="stylesheet" />
+    <script src="~/js/Agenda/listConsultas.js"></script>
 <div>
     <div>
         <h2>Filtrar Consultas Agendadas</h2>
         <div class="row" style="margin-left: 0;">
             <form asp-action="GetConsultaPorParam" method="GET">
-                <div class="form-row">
-                    <div style="width: 100%">
-                        <h4>Intervalo de datas</h4>
+                <h4>Escolha a forma de filtro desejada:</h4>
+                <div class="row rowMargin">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rdFiltros" id="rdFiltroDatas" value="D">
+                        <label class="form-check-label" for="rdFiltroDatas">Filtrar por Intervalo de Datas e/ou Situação</label>
                     </div>
-                    <div class="col-lg-8 row">
-                        <div class="col-md-5">
-                            <label class="control-label">Data Inicial</label>
-                            <input type="datetime-local" name="DataInicioD" class="form-control" />
-                        </div>
-                        <div class="col-md-2" style="align-self: flex-end; margin-bottom: 7px; text-align: -webkit-center;">
-                            <span style="margin: 35px 20px;">ATÉ</span>
-                        </div>
-                        <div class="col-md-5">
-                            <label class="control-label">Data Final</label>
-                            <input type="datetime-local" name="DataFimD" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-lg-1" style="align-self: flex-end; margin-bottom: 7px; text-align: -webkit-center;">
-                        <span><b>OU/E</b></span>
-                    </div>
-                    <div class="col-lg-3">
-                        @Html.Label("IndrStatusN", "Situação da Consulta*")
-                        <select class="form-control" name="IndrStatusN" asp-items="Html.GetEnumSelectList<EnumStatus>()">
-                            <option selected="selected" value="">Selecione a Situação</option>
-                        </select>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rdFiltros" id="rdFiltroClinica" value="C">
+                        <label class="form-check-label" for="rdFiltroClinica">Filtrar por Clínica e Data da Consulta</label>
                     </div>
                 </div>
-                <hr />
-                <div class="form-row">
-                    <div class="col-md-5">
-                        <label class="control-label">Clínica</label>
-                        <select name="ClinicaId" class="form-control" asp-items="ViewBag.ClinicaId">
-                            <option selected="selected" value="">Selecione a Clínica</option>
-                        </select>
+                <div id="filtroIntervaloData" style="display: none;">
+                    <div class="form-row">
+                        <div class="col-lg-8 row">
+                            <div class="col-md-5">
+                                <label class="control-label">Data Inicial</label>
+                                <input type="datetime-local" name="DataInicioD" class="form-control" />
+                            </div>
+                            <div class="col-md-2 separadorInputs">
+                                <span style="margin: 35px 20px;">ATÉ</span>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="control-label">Data Final</label>
+                                <input type="datetime-local" name="DataFimD" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-lg-1 separadorInputs">
+                            <span><b>OU/E</b></span>
+                        </div>
+                        <div class="col-lg-3">
+                            @Html.Label("IndrStatusN", "Situação da Consulta*")
+                            <select class="form-control" name="IndrStatusN" asp-items="Html.GetEnumSelectList<EnumStatus>()">
+                                <option selected="selected" value="">Selecione a Situação</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-2" style="align-self: flex-end; margin-bottom: 7px; text-align: -webkit-center;">
-                        <span><b>E</b></span>
-                    </div>
-                    <div class="col-md-5">
-                        <label class="control-label">Data da Consulta</label>
-                        <input type="date" name="DataConsulta" class="form-control"/>
+                </div>
+                <div id="filtroPorClinica" style="display: none;">
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <label class="control-label">Clínica</label>
+                            <select name="ClinicaId" class="form-control" asp-items="ViewBag.ClinicaId">
+                                <option selected="selected" value="">Selecione a Clínica</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 separadorInputs">
+                            <span><b>E</b></span>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="control-label">Data da Consulta</label>
+                            <input type="date" name="DataConsulta" class="form-control" />
+                        </div>
                     </div>
                 </div>
                 <div class="form-group" style="margin-top: 10px;">
@@ -63,7 +75,7 @@
     {
         if(ViewBag.QtdeConsultasDisp != null)
         {
-            <label>Consultas disponíveis para esta data: @ViewBag.QtdeConsultasDisp</label> 
+            <label class="lbQuantidade">A Clínica contém @ViewBag.QtdeConsultasDisp vagas disponíveis para esta data.</label> 
         }
         <div class="table-responsive">
             <table class="table">
@@ -119,6 +131,7 @@
     }
     else
     {
-        <p style="color: cornflowerblue; font-size:medium;">Does not contain records with the selected filter</p>
+        <p style="color: cornflowerblue; font-size:medium;">Não contém registros com os filtros selecionados</p>
     }
 </div>
+

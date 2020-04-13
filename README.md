@@ -5,7 +5,7 @@ Agendar consultas para clínicas cadastradas
 
 * Clone este repositório
   ```
-  $ git clone https://github.com/Rheniery/Agendador
+  $ git clone https://github.com/Rheniery/Agendador.git
   ```
 
 Execute os scripts disponíveis na pasta `DataBaseSql` para criação do seu banco de dados
